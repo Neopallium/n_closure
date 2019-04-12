@@ -1,0 +1,13 @@
+# closure
+---
+imports:
+    fips-googletest:
+        git: https://github.com/fips-libs/fips-googletest.git
+
+exports:
+    header-dirs: [ . ]
+        
+run:
+    game:
+        cwd: ./host
+
