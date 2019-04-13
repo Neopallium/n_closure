@@ -1,6 +1,7 @@
 
 #include <stdio.h>
 
+#define MAX_SLOTS 10
 #include "../n_closure.h"
 
 typedef int (*cb_func)(int x, int y, double percent, void *userdata);
