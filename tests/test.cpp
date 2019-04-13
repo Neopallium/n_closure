@@ -2,10 +2,18 @@
 
 #include <stdio.h>
 #include <stdint.h>
+#include <inttypes.h>
 
 #include "../n_closure.h"
 
 typedef int * intptr;
+
+#define TEST2_FMT \
+	"%" PRIu64 ",%" PRIu64
+#define TEST4_FMT \
+	TEST2_FMT "," TEST2_FMT
+#define TEST6_FMT \
+	TEST4_FMT "," TEST2_FMT
 
 #define TEST_EXPECT2(NAME, V1, V2) \
 	EXPECT_EQ(impl_ ## NAME(V1, V2), func(V1, V2))
@@ -22,11 +30,14 @@ typedef int * intptr;
 	static void test_ ## NAME() { \
 		cb_ ## NAME func = (cb_ ## NAME)n_closure_new((void *)impl_ ## NAME); \
 		uint64_t p1 = 1; uint64_t p2 = 2; \
+		printf("test " #NAME "(" TEST2_FMT ")\n", p1, p2); \
 		TEST_EXPECT2(NAME, (T1)p1, (T2)p2); \
  		p1 *= 10; p2 *= 100; \
+		printf("test " #NAME "(" TEST2_FMT ")\n", p1, p2); \
 		TEST_EXPECT2(NAME, (T1)p1, (T2)p2); \
 		p1 /= 1000000; p2 /= 100000; \
 		p1 += 1000000; p2 += 100000; \
+		printf("test " #NAME "(" TEST2_FMT ")\n", p1, p2); \
 		TEST_EXPECT2(NAME, (T1)p1, (T2)p2); \
 	}
 #define TEST_CODE_FUNC4(NAME, T1, T2, T3, T4, RC) \
@@ -37,11 +48,14 @@ typedef int * intptr;
 	static void test_ ## NAME() { \
 		cb_ ## NAME func = (cb_ ## NAME)n_closure_new((void *)impl_ ## NAME); \
 		uint64_t p1 = 1; uint64_t p2 = 2; uint64_t p3 = 3; uint64_t p4 = 4; \
+		printf("test " #NAME "(" TEST4_FMT ")\n", p1, p2, p3, p4); \
 		TEST_EXPECT4(NAME, (T1)p1, (T2)p2, (T3)p3, (T4)p4); \
  		p1 *= 10; p2 *= 100; p3 *= 1000; p4 *= 10000; \
+		printf("test " #NAME "(" TEST4_FMT ")\n", p1, p2, p3, p4); \
 		TEST_EXPECT4(NAME, (T1)p1, (T2)p2, (T3)p3, (T4)p4); \
 		p1 /= 1000000; p2 /= 100000; p3 /= 10000; p4 /= 1000; \
 		p1 += 1000000; p2 += 100000; p3 += 10000; p4 += 1000; \
+		printf("test " #NAME "(" TEST4_FMT ")\n", p1, p2, p3, p4); \
 		TEST_EXPECT4(NAME, (T1)p1, (T2)p2, (T3)p3, (T4)p4); \
  }
 #define TEST_CODE_FUNC6(NAME, T1, T2, T3, T4, T5, T6, RC) \
@@ -54,11 +68,14 @@ typedef int * intptr;
 	static void test_ ## NAME() { \
 		cb_ ## NAME func = (cb_ ## NAME)n_closure_new((void *)impl_ ## NAME); \
 		uint64_t p1 = 1; uint64_t p2 = 2; uint64_t p3 = 3; uint64_t p4 = 4; uint64_t p5 = 5; uint64_t p6 = 6; \
+		printf("test " #NAME "(" TEST6_FMT ")\n", p1, p2, p3, p4, p5, p6); \
 		TEST_EXPECT6(NAME, (T1)p1, (T2)p2, (T3)p3, (T4)p4, (T5)p5, (T6)p6); \
 		p1 *= 10; p2 *= 100; p3 *= 1000; p4 *= 10000; p5 *= 100000; p6 *= 1000000; \
+		printf("test " #NAME "(" TEST6_FMT ")\n", p1, p2, p3, p4, p5, p6); \
 		TEST_EXPECT6(NAME, (T1)p1, (T2)p2, (T3)p3, (T4)p4, (T5)p5, (T6)p6); \
 		p1 /= 1000000; p2 /= 100000; p3 /= 10000; p4 /= 1000; p5 /= 100; p6 /= 10; \
 		p1 += 1000000; p2 += 100000; p3 += 10000; p4 += 1000; p5 += 100; p6 += 10; \
+		printf("test " #NAME "(" TEST6_FMT ")\n", p1, p2, p3, p4, p5, p6); \
 		TEST_EXPECT6(NAME, (T1)p1, (T2)p2, (T3)p3, (T4)p4, (T5)p5, (T6)p6); \
 	}
 #define TEST_FUNC2(T1, T2, RC) \
