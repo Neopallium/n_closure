@@ -2,7 +2,7 @@
 # project: n_closure
 #
 
-set(CMAKE_VERBOSE_MAKEFILE ON)
+#set(CMAKE_VERBOSE_MAKEFILE ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS 1)
 
 cmake_minimum_required(VERSION 3.0)
