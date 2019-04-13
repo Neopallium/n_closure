@@ -29,8 +29,8 @@ script:
     # build
     - python fips gen
     - python fips list targets
-    - python fips build linux-make-debug
-    - python fips build linux-make-release
+    - python fips build $TRAVIS_OS_NAME-make-debug
+    - python fips build $TRAVIS_OS_NAME-make-release
     # run tests
-    - python fips run closureTest linux-make-debug
-    - python fips run closureTest linux-make-release
+    - python fips run closureTest $TRAVIS_OS_NAME-make-debug
+    - python fips run closureTest $TRAVIS_OS_NAME-make-release
