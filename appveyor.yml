@@ -1,0 +1,8 @@
+# https://ci.appveyor.com/project/Neopallium/n_closure
+---
+shallow_clone: true
+image:
+    - Visual Studio 2017
+build_script:
+    - cmd: c:/Python36/python.exe fips build win64-vstudio-debug
+    - cmd: c:/Python36/python.exe fips run crTest
