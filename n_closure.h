@@ -35,7 +35,7 @@ static int g_closure_next_slot = 0;
 
 static void *n_trampoline_func_handler(N_TRAMPOLINE_PARAMS_DEF) {
 	n_closure *closure = g_closure_slots[slot];
-	//printf("n_trampoline_func_handler(%d, %p, %p, %p, %p, %p, %p, %f, %f, %f, %f, %f, %f)\n", N_TRAMPOLINE_PARAMS);
+	printf("n_trampoline_func_handler(%d, %p, %p, %p, %p, %p, %p, %f, %f, %f, %f, %f, %f)\n", N_TRAMPOLINE_PARAMS);
 	if (closure && closure->func) {
 		return closure->func(N_USER_PARAMS);
 	}
