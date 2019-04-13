@@ -3,12 +3,20 @@
 shallow_clone: true
 image:
     - Visual Studio 2017
+    - Ubuntu
+
 build_script:
     - cmd: c:/Python36/python.exe fips build win64-vstudio-debug
-    - cmd: c:/Python36/python.exe fips run closureTest
     - cmd: c:/Python36/python.exe fips build win64-vstudio-release
-    - cmd: c:/Python36/python.exe fips run closureTest
     - cmd: c:/Python36/python.exe fips build win32-vstudio-debug
-    - cmd: c:/Python36/python.exe fips run closureTest
     - cmd: c:/Python36/python.exe fips build win32-vstudio-release
-    - cmd: c:/Python36/python.exe fips run closureTest
+    - sh: ./fips build linux-make-debug
+    - sh: ./fips build linux-make-release
+
+test_script:
+    - cmd: c:/Python36/python.exe fips run closureTest win64-vstudio-debug
+    - cmd: c:/Python36/python.exe fips run closureTest win64-vstudio-release
+    - cmd: c:/Python36/python.exe fips run closureTest win32-vstudio-debug
+    - cmd: c:/Python36/python.exe fips run closureTest win32-vstudio-release
+    - sh: ./fips run closureTest linux-make-debug
+    - sh: ./fips run closureTest linux-make-release
