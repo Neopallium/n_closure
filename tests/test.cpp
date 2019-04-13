@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 
 #include <stdio.h>
+#include <stdint.h>
 
 #include "../n_closure.h"
 
