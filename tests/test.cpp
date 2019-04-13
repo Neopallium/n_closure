@@ -21,7 +21,7 @@ typedef int * intptr;
 	} \
 	static void test_ ## NAME() { \
 		cb_ ## NAME func = (cb_ ## NAME)n_closure_new((void *)impl_ ## NAME); \
-		long p1 = 1; long p2 = 2; \
+		uint64_t p1 = 1; uint64_t p2 = 2; \
 		TEST_EXPECT2(NAME, (T1)p1, (T2)p2); \
  		p1 *= 10; p2 *= 100; \
 		TEST_EXPECT2(NAME, (T1)p1, (T2)p2); \
@@ -36,7 +36,7 @@ typedef int * intptr;
 	} \
 	static void test_ ## NAME() { \
 		cb_ ## NAME func = (cb_ ## NAME)n_closure_new((void *)impl_ ## NAME); \
-		long p1 = 1; long p2 = 2; long p3 = 3; long p4 = 4; \
+		uint64_t p1 = 1; uint64_t p2 = 2; uint64_t p3 = 3; uint64_t p4 = 4; \
 		TEST_EXPECT4(NAME, (T1)p1, (T2)p2, (T3)p3, (T4)p4); \
  		p1 *= 10; p2 *= 100; p3 *= 1000; p4 *= 10000; \
 		TEST_EXPECT4(NAME, (T1)p1, (T2)p2, (T3)p3, (T4)p4); \
@@ -53,7 +53,7 @@ typedef int * intptr;
 	} \
 	static void test_ ## NAME() { \
 		cb_ ## NAME func = (cb_ ## NAME)n_closure_new((void *)impl_ ## NAME); \
-		long p1 = 1; long p2 = 2; long p3 = 3; long p4 = 4; long p5 = 5; long p6 = 6; \
+		uint64_t p1 = 1; uint64_t p2 = 2; uint64_t p3 = 3; uint64_t p4 = 4; uint64_t p5 = 5; uint64_t p6 = 6; \
 		TEST_EXPECT6(NAME, (T1)p1, (T2)p2, (T3)p3, (T4)p4, (T5)p5, (T6)p6); \
 		p1 *= 10; p2 *= 100; p3 *= 1000; p4 *= 10000; p5 *= 100000; p6 *= 1000000; \
 		TEST_EXPECT6(NAME, (T1)p1, (T2)p2, (T3)p3, (T4)p4, (T5)p5, (T6)p6); \
