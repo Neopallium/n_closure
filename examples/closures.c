@@ -20,7 +20,7 @@ int test_func(int x, int y, double percent, void *userdata) {
 
 int main(int argc, char *argv[]) {
 	counter_state state = {0};
-	cb_func func1 = (cb_func)n_closure_new((void *)test_func);
+	cb_func func1 = (cb_func)n_closure_new(test_func, NULL);
 
 	printf("rc = %d\n", func1(100, 200, 0.10, &state));
 	printf("rc = %d\n", func1(123, 234, 0.12, &state));

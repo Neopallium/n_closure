@@ -5,6 +5,11 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#ifndef N_ASSERT
+#include <assert.h>
+#define N_ASSERT(e) assert(e)
+#endif
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -32,10 +37,11 @@ extern "C" {
 #define N_TRAMPOLINE_PARAMS \
 	slot, N_USER_PARAMS
 
-typedef void *(*n_user_func)(N_USER_PARAMS_DEF);
+typedef void *(n_user_func)(N_USER_PARAMS_DEF);
 
 typedef struct {
-	n_user_func func;
+	n_user_func *func;
+	int slot;
 } n_closure;
 
 #ifndef MAX_SLOTS
@@ -80,6 +86,7 @@ typedef struct {
 
 static n_closure *g_closure_slots[MAX_SLOTS];
 static int g_closure_next_slot = 0;
+static int g_closure_freed_slots = 0;
 
 static void *n_trampoline_func_handler(N_TRAMPOLINE_PARAMS_DEF) {
 	n_closure *closure = g_closure_slots[slot];
@@ -113,23 +120,64 @@ TR_FUNC_REPEAT
 
 #define TR_FUNC(a,b,c) \
 	TR_FUNC_NAME(a,b,c),
-static n_user_func g_trampoline_slots[] = {
+static n_user_func * const g_trampoline_slots[] = {
 TR_FUNC_REPEAT
 };
 #undef TR_FUNC
 
-void *n_closure_new(void *user_func) {
-	n_closure *closure;
-	// Get next slot number
+static int n_closure_get_free_slot() {
+	// try to re-used freed slots.
+	if (g_closure_freed_slots > 0) {
+		int max = g_closure_next_slot;
+		for (int i = 0; i < max; i++) {
+			if (g_closure_slots[i] == NULL) {
+				g_closure_freed_slots--;
+				return i;
+			}
+		}
+	}
 	int slot = g_closure_next_slot;
-	if (slot >= MAX_SLOTS) return 0;
+	if (slot >= MAX_SLOTS) return -1;
 	g_closure_next_slot++;
+	return slot;
+}
+
+#define n_closure_new(user_func, pclosure) n_closure_new_impl((void *)user_func, pclosure)
+void *n_closure_new_impl(void *user_func, n_closure **pclosure) {
+	n_closure *closure;
+	// Get slot number
+	int slot = n_closure_get_free_slot();
+	printf("---- use slot=%d\n", slot);
+	if (slot < 0) return 0;
 
 	closure = (n_closure *)malloc(sizeof(n_closure));
-	closure->func = (n_user_func)user_func;
+	closure->func = (n_user_func *)user_func;
+	closure->slot = slot;
 	g_closure_slots[slot] = closure;
+	if (pclosure) {
+		*pclosure = closure;
+	}
 	// return trampoline function
 	return (void *)g_trampoline_slots[slot];
+}
+
+#define n_closure_find_from_func(func) n_closure_find_from_func_impl((n_user_func *)func)
+n_closure *n_closure_find_from_func_impl(n_user_func *func) {
+	int max = g_closure_next_slot;
+	for (int i = 0; i < max; i++) {
+		if (g_trampoline_slots[i] == func) {
+			return g_closure_slots[i];
+		}
+	}
+	return NULL;
+}
+
+void n_closure_free(n_closure *closure) {
+	N_ASSERT(closure);
+	int slot = closure->slot;
+	N_ASSERT(slot >= 0 && slot < MAX_SLOTS);
+	g_closure_slots[slot] = NULL;
+	g_closure_freed_slots++;
 }
 
 #ifdef __cplusplus
