@@ -9,3 +9,4 @@
 -Wno-unused-function
 -Wno-unknown-pragmas
 -Wno-ignored-attributes
+-I../fips-googletest/gtest/googletest/include/
