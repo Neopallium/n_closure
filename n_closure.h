@@ -14,8 +14,8 @@
 extern "C" {
 #endif
 
-#ifdef _WIN32
-// For Win32/Win64
+#ifdef _WIN64
+// For Win64
 // Warning: Trampoline functions can not touch the floating-point registers (XMM0-XMM3)
 #define N_USER_PARAMS_DEF \
 	void *p1, void *p2, void *p3, void *p4, void *p5, void *p6, \
